@@ -1,0 +1,44 @@
+<div class="container">
+	<form name="resourceForm" class="row">
+		<div class="col-sm-12">
+			<div class="form-group row">
+				<label for="resourceName" class="col-sm-6">Resource Name:</label>
+				<input type="text" class="col-sm-6" ng-model="newResource.name">
+			</div>
+			<div class="form-group row">
+				<label for="resourceDesc" class="col-sm-6">Resource Description:</label>
+				<textarea class="col-sm-6" ng-model="newResource.desc"></textarea>
+			</div>
+			<div class="form-group row hidden-xs">
+				<label for="resourceDesc" class="col-sm-6">Resource Image:</label>
+				<input type="file" class="col-sm-6" ng-model="newResource.img"></textarea>
+			</div>
+			<div class="form-group row visible-xs-block">
+				<div class="col-sm-12 col-xs-6">
+	                <a href="#" class="dropdown-toggle captureCam" data-toggle="dropdown" role="button">
+	                  <img src="cam.jpg" class="DimImg"/>
+	                </a>
+	                <ul class="dropdown-menu">
+	                  <li ng-click="picSource='CAMERA';getPic()">Camera</li>
+	                  <li ng-click="picSource='PHOTOLIBRARY';getPic()">Galary</li>
+	                </ul>
+	                <div id="capturedImg"></div>
+	              </div>
+			</div>
+			<div class="form-group row">
+				<label for="resourceAvailFrom" class="col-sm-3">Available From:</label>
+				<input type="date" class="col-sm-3" ng-model="newResource.from">
+				<label for="resourceAvailTo" class="col-sm-3">Available Till:</label>
+				<input type="date" class="col-sm-3" ng-model="newResource.to">
+			</div>
+			<div class="form-group row">
+				<label for="resourceCost" class="col-sm-6">Cost of Resource per Day:</label>
+				<input type="number" class="col-sm-6" ng-model="newResource.amount">
+			</div>
+			<div class="form-group row">
+				<button class="col-sm-3 btn btn-primary pull-right" ng-click="postResource()">Post</button>
+				<button class="col-sm-3 btn btn-default pull-right" ng-click="">Cancel</button>
+			</div>
+		</div>
+	</form>
+</div>

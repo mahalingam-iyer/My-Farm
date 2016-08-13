@@ -1,0 +1,153 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="form-group has-feedback" ng-if="$root.showSearchBox">
+			    <label class="control-label" for="inputSuccess2">{{'Search text' | translate}}</label>
+			    <input type="text" class="form-control" id="inputSuccess2" ng-model="$root.searchTxt" autofocus/>
+			</div>
+		</div>
+	</div>
+	<div class="row padding_top_10 border_bottom" ng-repeat="post in posts | searchText">
+		<div class="col-sm-3">
+			<img ng-src="{{post.img}}" class="postImg"/>
+		</div>
+		<div class="col-sm-9">
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="row">
+						<div class="col-sm-4">{{post.name | translate}}</div>
+						<div class="col-sm-4">{{'Rating' | translate}}: {{post.rating}}/10</div>
+						<div class="col-sm-4">{{'Amount' | translate}}: Rs.{{post.amount}}/{{'Day' | translate}}</div>
+					</div>
+					<div class="row padding_top_10">
+						<div class="col-sm-8">{{post.desc | translate}}</div>
+						<div class="col-sm-4">
+							<div class="row">
+								<div class="col-sm-12">
+									<button class="btn btn-primary"  data-toggle="modal" data-target="#bookResourceModal" ng-click="bookThisPost(post)">{{'Book it' | translate}}</button>
+								</div>
+							</div>
+							<div class="row padding_top_10">
+								<div class="col-sm-12">
+									{{'Available from' | translate}}:{{post.from}} {{'To' | translate}} {{post.to}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{'Post Resource' | translate}}</h4>
+              </div>
+              <div class="modal-body">
+                <div class="container">
+                  <form name="resourceForm" class="row">
+                    <div class="col-sm-12">
+                      <div class="form-group row">
+                        <label for="resourceName" class="col-sm-6">{{'Resource Name' | translate}}</label>
+                        <input type="text" class="col-sm-6" ng-model="newResource.name">
+                      </div>
+                      <div class="form-group row">
+                        <label for="resourceDesc" class="col-sm-6">{{'Resource Description' | translate}}</label>
+                        <textarea class="col-sm-6" ng-model="newResource.desc"></textarea>
+                      </div>
+                      <div class="form-group row hidden-xs">
+                        <label for="resourceDesc" class="col-sm-6">{{'Resource Image' | translate}}</label>
+                        <input type="file" id="postResFlUp" class="col-sm-6"></textarea>
+                      </div>
+                      <div class="form-group row visible-xs">
+                        <div class="col-xs-6">
+                        	<label>{{'Resource Image' | translate}}</label>
+                        </div>
+                        <div class="col-xs-6" ng-init="showCamDD=false">
+                            <a ng-click="showCamDD=!showCamDD">
+                              <img src="cam.jpg" class="DimImg"/>
+                            </a>
+                            <ul ng-show="showCamDD">
+                              <li ng-click="showCamDD=!showCamDD;picSource='CAMERA';getPic()">Camera</li>
+                              <li ng-click="showCamDD=!showCamDD;picSource='PHOTOLIBRARY';getPic()">Galary</li>
+                            </ul>
+                            <div id="capturedImg"></div>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="resourceAvailFrom" class="col-sm-2 col-xs-6">{{'Available From' | translate }}</label>
+                        <input type="date" class="col-sm-4 col-xs-6" ng-model="newResource.from">
+                        <label for="resourceAvailTo" class="col-sm-2 col-xs-6">{{'Available Till' | translate}}</label>
+                        <input type="date" class="col-sm-4 col-xs-6" ng-model="newResource.to">
+                      </div>
+                      <div class="form-group row">
+                        <label for="resourceCost" class="col-sm-6">{{'Cost of Resource per Day' | translate}}</label>
+                        <input type="number" class="col-sm-6" ng-model="newResource.amount">
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+              	<button class="col-sm-3 btn btn-primary pull-right" data-dismiss="modal" ng-click="postResource()">{{'Post' | translate}}</button>
+              	<button class="col-sm-3 btn btn-default pull-right" data-dismiss="modal" ng-click="">{{'Cancel' | translate}}</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div id="bookResourceModal" class="modal fade" role="dialog">
+                  <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">{{'Book a resource' | translate}}</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="container">
+                            <div class="col-sm-12">
+                              <div class="row">
+                                <div for="resourceName" class="col-sm-6">{{'Owner Name' | translate}}</div>
+                                <div type="text" class="col-sm-6">{{selectedResource.owner.name}}</div>
+                              </div>
+                              <div class="row">
+                                <div for="resourceDesc" class="col-sm-6">{{'Owner Description' | translate}}</div>
+                                <div class="col-sm-6">{{selectedResource.owner.desc}}</div>
+                              </div>
+                              <div class="row" ng-if="getDetailsStep==0">
+                              	<label class="col-sm-6">{{'Enter mobile number' | translate}}</label>
+                              	<input class="col-sm-6" type='tel' ng-model='custDetails.number'/>
+                              </div>
+                              <div class="row" ng-if="getDetailsStep==1">
+                              	<label class="col-sm-6">{{'Enter code sent to mobile number' | translate}}</label>
+                              	<input class="col-sm-6" type='tel' ng-model='custDetails.code'/>
+                              </div>
+                              <div class="row" ng-if="getDetailsStep==2">
+                                <div for="resourceDesc" class="col-sm-6">{{'Owner Contact Number' | translate}}</div>
+                                <div type="file" id="postResFlUp" class="col-sm-6">{{selectedResource.owner.number}}</div>
+                              </div>
+                              <div class="row" ng-if="getDetailsStep==2">
+                                <div for="resourceDesc" class="col-sm-6">{{'Owner Contact Address' | translate}}</div>
+                                <div type="file" id="postResFlUp" class="col-sm-6">{{selectedResource.owner.address}}</div>
+                              </div>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                      	<button ng-if="getDetailsStep==0" class="btn btn-primary col-sm-4" ng-click="getMobileNo()">{{'Proceed' | translate}}</button>
+                      	<button ng-if="getDetailsStep==1" class="btn btn-primary col-sm-4" ng-click="getMobileNo()">{{'Proceed' | translate}}</button>
+                      	<button ng-if="getDetailsStep==2" class="col-sm-3 btn btn-default pull-right" data-dismiss="modal" ng-click="">{{'Got It' | translate}}</button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
